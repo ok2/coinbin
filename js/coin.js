@@ -618,10 +618,20 @@
 					var privkey = (r.key_bytes).slice(1, 33);
 					var privkeyHex = Crypto.util.bytesToHex(privkey);
 					var pubkey = coinjs.newPubkey(privkeyHex);
+					var addr_format = $("#verifyHDaddress .derivation_addr_format").val();
+					if (addr_format == "bech32") {
+						var address = coinjs.bech32Address(pubkey);
+					} else if (addr_format == "segwit") {
+						var address = coinjs.segwitAddress(pubkey);
+					} else {
+						var address = {'address': coinjs.pubkey2address(pubkey),
+							'redeemscript': ''};
+					}
 
 					r.keys = {'privkey':privkeyHex,
 						'pubkey':pubkey,
-						'address':coinjs.pubkey2address(pubkey),
+						'address':address.address,
+						'script':address.redeemscript,
 						'wif':coinjs.privkey2wif(privkeyHex)};
 
 				} else if(r.key_bytes[0] == 0x02 || r.key_bytes[0] == 0x03) {
