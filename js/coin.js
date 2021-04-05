@@ -713,23 +713,34 @@
 			var ecparams = EllipticCurve.getSECCurveByName("secp256k1");
 			var curve = ecparams.getCurve();
 
-			var k, key, pubkey, o;
+			var k, key, pubkey, o, addr_format, address_fun, address;
 
 			o = coinjs.clone(this);
 			o.chain_code = ir;
 			o.child_index = i;
 
+			addr_format = $("#verifyHDaddress .derivation_addr_format").val();
+			if (addr_format == "bech32") {
+				address_fun = function(pk) { return coinjs.bech32Address(pk); };
+			} else if (addr_format == "segwit") {
+				address_fun = function(pk) { return coinjs.segwitAddress(pk); };
+			} else {
+				address_fun = function(pk) {
+					return {'address': coinjs.pubkey2address(pubkey), 'redeemscript': ''};
+				};
+			}
 			if(this.type=='private'){
 				// derive key pair from from a xprv key
 				k = il.add(new BigInteger([0].concat(Crypto.util.hexToBytes(this.keys.privkey)))).mod(ecparams.getN());
 				key = Crypto.util.bytesToHex(k.toByteArrayUnsigned());
 
 				pubkey = coinjs.newPubkey(key);
-
+				address = address_fun(pubkey);
 				o.keys = {'privkey':key,
 					'pubkey':pubkey,
 					'wif':coinjs.privkey2wif(key),
-					'address':coinjs.pubkey2address(pubkey)};
+					'address':address.address,
+					'script':address.redeemscript};
 
 			} else if (this.type=='public'){
 				// derive xpub key from an xpub key
@@ -746,9 +757,11 @@
 					publicKeyBytesCompressed.unshift(0x03)
 				}
 				pubkey = Crypto.util.bytesToHex(publicKeyBytesCompressed);
+				address = address_fun(pubkey);
 
 				o.keys = {'pubkey':pubkey,
-					'address':coinjs.pubkey2address(pubkey)}
+					'address':address.address,
+					'script':address.redeemscript}
 			} else {
 				// fail
 			}
