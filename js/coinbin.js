@@ -1704,15 +1704,23 @@ $(document).ready(function() {
 
 	function deriveHDaddress() {
 		var hd = coinjs.hd($("#verifyHDaddress .hdKey").html());
-		var index_start = $("#verifyHDaddress .derivation_index_start").val()*1;
-		var index_end = $("#verifyHDaddress .derivation_index_end").val()*1;
+		var index_start = $("#verifyHDaddress .derivation_index_start").val();
+		if ((index_start.length > 1) && (index_start[index_start.length - 1] == '\'')) {
+			var use_private_index = '\'';
+			index_start = index_start.replace(/[']/, "") * 1;
+		} else {
+			var use_private_index = '';
+			index_start = index_start.replace(/[']/, "") * 1;
+		}
+		var index_end = $("#verifyHDaddress .derivation_index_end").val().replace(/[']/, "") * 1;
+		$("#verifyHDaddress .derivation_index_end").val(index_end + use_private_index);
 		var html = '';
 		$("#verifyHDaddress .derived_data table tbody").html("");
 		for(var i=index_start;i<=index_end;i++){
 			if($("#hdpathtype option:selected").val()=='simple'){
 				var derived = hd.derive(i);
 			} else {
-				var derived = hd.derive_path(($("#hdpath input").val().replace(/\/+$/, ""))+'/'+i);
+				var derived = hd.derive_path(($("#hdpath input").val().replace(/\/+$/, ""))+'/'+i+use_private_index);
 			}
 			html += '<tr>';
 			html += '<td>'+i+'</td>';
