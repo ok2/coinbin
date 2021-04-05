@@ -726,7 +726,7 @@
 				address_fun = function(pk) { return coinjs.segwitAddress(pk); };
 			} else {
 				address_fun = function(pk) {
-					return {'address': coinjs.pubkey2address(pubkey), 'redeemscript': ''};
+					return {'address': coinjs.pubkey2address(pk), 'redeemscript': ''};
 				};
 			}
 			if(this.type=='private'){
