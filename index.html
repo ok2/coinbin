@@ -1456,6 +1456,19 @@
 							</div>
 						</div>
 
+						<hr>
+
+						<div class="row">
+							<div class="col-md-12">
+								<b>HD wallet hardened path derivation</b>: <br>
+								<p class="text-muted">The path derivation for hardened paths was calculated wrong in earlier versions of coinb.in. Please select the old path derivation to recover HD wallet keys generated with older version of coinb.in.</p>
+								<select class="form-control" id="coinjs_derivation">
+									<option value="bip32_derivation">BIP32 derivation</option>
+									<option value="coinbin_broken">Old coinb.in derivation</option>
+								</select>
+							</div>
+						</div>
+
 						<br>
 
 						<div id="statusSettings" class="hidden alert">

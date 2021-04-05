@@ -1914,6 +1914,8 @@ $(document).ready(function() {
 			coinjs.hdkey.pub =  $("#coinjs_hdpub").val()*1;
 			coinjs.hdkey.prv =  $("#coinjs_hdprv").val()*1;
 
+			coinjs.hd_derivation =  $("#coinjs_derivation").val();
+
 			configureBroadcast();
 			configureGetUnspentTx();
 
@@ -1959,6 +1961,7 @@ $(document).ready(function() {
 		$("#coinjs_multisig").val(o[2]);
 		$("#coinjs_hdpub").val(o[3]);
 		$("#coinjs_hdprv").val(o[4]);
+		$("#coinjs_derivation").val(o[7]);
 
 		// hide/show custom screen
 		if($("option:selected",this).val()=="custom"){
