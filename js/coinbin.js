@@ -1721,6 +1721,7 @@ $(document).ready(function() {
 				var derived = hd.derive(i);
 			} else {
 				var derived = hd.derive_path(($("#hdpath input").val().replace(/\/+$/, ""))+'/'+i+use_private_index);
+				$("#hdpath").removeClass(); // make it visible
 			}
 			html += '<tr>';
 			html += '<td>'+i+'</td>';
